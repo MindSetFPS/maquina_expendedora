@@ -11,11 +11,7 @@ namespace Monedero {
         int amount_of_20_bill;
         int amount_of_50_bill;
 
-<<<<<<< HEAD
-        public Monedero(int amount_of_1_coins, int amount_of_2_coins,int amount_of_5_coins,int amount_of_10_coins,int amount_of_20_bill,int amount_of_50_bill){
-=======
         Monedero(int amount_of_1_coins, int amount_of_2_coins, int amount_of_5_coins, int amount_of_10_coins, int amount_of_20_bill, int amount_of_50_bill){
->>>>>>> refs/remotes/origin/main
             this.amount_of_1_coins = amount_of_1_coins;
             this.amount_of_2_coins = amount_of_2_coins;
             this.amount_of_5_coins = amount_of_5_coins;
@@ -42,10 +38,6 @@ namespace Monedero {
             TotalMoney = TotalMoney - productPrice;
         }
 
-<<<<<<< HEAD
-        public void GiveRemaining(){
-            Console.WriteLine("To do ");
-=======
         public void GiveRemaining(){   // dar cambio sabiendo cuantas monedas de cada denominacion hay que dar pero sabiendo la existencia de estas mismas monedas
             Console.WriteLine("To do ")
             if (price < balance)
@@ -91,7 +83,6 @@ namespace Monedero {
                 }
             }
             
->>>>>>> refs/remotes/origin/main
         }
 
     }
