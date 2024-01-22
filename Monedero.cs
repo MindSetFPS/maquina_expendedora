@@ -38,11 +38,12 @@ namespace Monedero {
             TotalMoney = TotalMoney - productPrice;
         }
 
-        public void GiveRemaining(){   // dar cambio sabiendo cuantas monedas de cada denominacion hay que dar pero sabiendo la existencia de estas mismas monedas
-            Console.WriteLine("To do ")
+        // Dar cambio considerando cuantas monedas de cada denominacion existen actualemente dentro de la maquina.
+        public void GiveRemaining(double price, double balance){   
+            Console.WriteLine("To do ");
             if (price < balance)
             {
-               int change = price - balance;
+               double change = price - balance;
                 
                 if ( amount_of_1_coins == 0 && amount_of_2_coins == 0 && amount_of_5_coins == 0 && amount_of_10_coins == 0 && amount_of_20_bill == 0 && amount_of_50_bill == 0)
                 {
@@ -53,32 +54,32 @@ namespace Monedero {
                     while (change >= 50)
                     {
                         Console.WriteLine("Drop: " + amount_of_50_bill--);
-                       int substraction = change - 50;
+                       double substraction = change - 50;
                     }
                     while (change >=20)
                     {
                         Console.WriteLine("Drop: " + amount_of_20_bill--);
-                        int substraction = change - 20;
+                        double substraction = change - 20;
                     }
                     while (change >= 10)
                     {
                         Console.WriteLine("Drop: " + amount_of_10_coins--);
-                        int substraction = change - 10;
+                        double substraction = change - 10;
                     }
                     while (change >= 5)
                     {
                         Console.WriteLine("Drop: " + amount_of_5_coins--);
-                        int substraction = change - 5;
+                        double substraction = change - 5;
                     }
                     while (change >= 2)
                     {
                         Console.WriteLine("Drop: " + amount_of_2_coins--);
-                        int substraction = change - 2;
+                        double substraction = change - 2;
                     }
                     while (change >= 1)
                     {
                         Console.WriteLine("Drop: " + amount_of_1_coins--);
-                        int substraction = change - 1;
+                        double substraction = change - 1;
                     }
                 }
             }
