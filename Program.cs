@@ -1,7 +1,4 @@
-﻿using Maquina;
-
-
-namespace ConsoleApp
+﻿namespace ConsoleApp
 {
     public class Program
     {
@@ -9,7 +6,8 @@ namespace ConsoleApp
         {
             Maquina.Maquina maquina = new Maquina.Maquina();
             Console.WriteLine("Hello World!");
-            maquina.Saludar();
+
+            maquina.MachineLoop();
         }
     }
 }
