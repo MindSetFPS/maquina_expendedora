@@ -15,14 +15,18 @@ namespace Maquina
         // 5.- Se vuelve al paso 1
 
         // Creando el monedero
-        Monedero.Monedero monedero = new Monedero.Monedero(
-            amount_of_1_coins: 5, 
-            amount_of_2_coins: 5, 
-            amount_of_5_coins: 5, 
-            amount_of_10_coins: 5, 
-            amount_of_20_bill: 5, 
-            amount_of_50_bill: 5
-        );
+
+        // List<Dinero.Dinero> denominaciones = new List<Dinero.Dinero>(){
+        //     new Dinero.Dinero(valor: 1, cantidad: 5, tipo: "billete"),
+        // };
+        Monedero.Monedero monedero = new Monedero.Monedero([
+            new Dinero.Dinero(valor: 1, cantidad: 5, tipo: "Moneda"),
+            new Dinero.Dinero(valor: 2, cantidad: 5, tipo: "Moneda"),
+            new Dinero.Dinero(valor: 5, cantidad: 5, tipo: "Moneda"),
+            new Dinero.Dinero(valor: 10, cantidad: 5, tipo: "Moneda"),
+            new Dinero.Dinero(valor: 20, cantidad: 5, tipo: "billete"),
+            new Dinero.Dinero(valor: 50, cantidad: 5, tipo: "billete"),
+        ]);
 
         // Creando la lista de productos de la maquina
        List<Producto.Producto> Products = new List<Producto.Producto>(){
@@ -57,7 +61,7 @@ namespace Maquina
                 } 
             }
 
-            Producto.Producto selectedProduct = productos.Find( x => x.code == Selection);
+            Producto.Producto selectedProduct = productos.Find( product => product.code == Selection);
 
             if (codeIsInProducts){
                 Receive_Balance(selectedProduct.price);
@@ -72,7 +76,6 @@ namespace Maquina
        public int Receive_Balance(double product_price)
        {
             Console.WriteLine("Please insert your balance \n The machine only accepts denominations of 5, 10, 20 and 50");
-
             double inserted_balance = 0;
             while (product_price > inserted_balance)
             {
@@ -81,9 +84,13 @@ namespace Maquina
                 Console.WriteLine($"Has insertado ${inserted_balance}");
             }
 
+            if (inserted_balance == product_price) {
+                Console.WriteLine("Entregar producto");
+            }
+
             if(inserted_balance > product_price) {
                 // calcular cambio
-                monedero.GiveRemaining();
+                monedero.GiveRemaining(price: product_price, balance: inserted_balance);
             }
             return balance;
        }
