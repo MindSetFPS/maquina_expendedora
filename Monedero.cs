@@ -33,7 +33,6 @@ namespace Monedero{
             bool comparison = false;
             foreach(Dinero.Dinero denomination in available_denominations){
                 comparison = denomination.valor == inserted_balance;
-                Console.WriteLine($"{inserted_balance} == {denomination.valor} {comparison}");
 
                 if(comparison){
                     break;
@@ -44,57 +43,35 @@ namespace Monedero{
 
         public bool CanGiveChange(double price, double balance){
                 double total_change = balance - price; //35
-                // List<Dinero.Dinero> available_denominations_copy = [];
                 double current_change = total_change; // 15
                 uint accumulated_change = 0; //0
-
-                // Print Original
-                Console.WriteLine($"Original");
-                foreach(Dinero.Dinero money in available_denominations){
-                    // available_denominations_copy.Add(money.Clone());
-                    Console.WriteLine($"{money.valor} {money.cantidad} {money.tipo}");
-                }
 
                 // Populate copy with elements
                 foreach(Dinero.Dinero money in available_denominations){
                     new_available_denominations.Add(money.Clone());
-                    // Console.WriteLine($"{money.valor} {money.cantidad} {money.tipo}");
                 }
 
                 // Print copy
-                Console.WriteLine($"Copy");
                 foreach (Dinero.Dinero money in new_available_denominations){
                     while( money.valor <= current_change && money.cantidad > 0) {
-                        // Console.WriteLine($"Te doy 1 {money.tipo} de {money.valor} ");
                         current_change = current_change - money.valor;
                         accumulated_change = accumulated_change + money.valor;
                         money.cantidad = money.cantidad - 1;   
                     }
-                    Console.WriteLine($"{money.valor} {money.cantidad} {money.tipo}");
-                }            
+                }
 
                 available_denominations = [];
-                // available_denominations = new_available_denominations ;
-
-
-                Console.WriteLine($"{current_change} {accumulated_change}");
+                available_denominations = new_available_denominations;
 
                 if(accumulated_change < total_change){
                     Console.WriteLine($"no hay suficiente cambio");
                 }
 
-                Console.ReadLine();
-
                 return accumulated_change >= total_change;
         }
 
-        public void BuyProduct(int productPrice)
-        {
-            TotalMoney = TotalMoney - (uint) productPrice;
-        }
         // Dar cambio considerando cuantas monedas de cada denominacion existen actualemente dentro de la maquina.
         public void GiveRemaining(double price, double balance){
-
             if (price < balance){
                 double total_change = balance - price;
                 double current_change = total_change;
@@ -122,10 +99,6 @@ namespace Monedero{
                 } else {
                     Console.WriteLine($"Cambio restante: {current_change}");
                     Console.WriteLine($"Cambio dado: {accumulated_change}");
-                }
-
-                foreach (Dinero.Dinero money in available_denominations){
-                    Console.WriteLine($"{money.valor} = {money.cantidad} {money.tipo}");
                 }
             }
         }

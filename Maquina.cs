@@ -58,9 +58,6 @@ namespace Maquina
             {
                 product_names = product_names + product.code + ", ";
             }
-            // Console.WriteLine($"Welcome, please insert the product code you want {product_names}.");
-
-            // Check if product is valid
 
             SelectedProductCode = Console.ReadLine();
 
@@ -75,30 +72,24 @@ namespace Maquina
                 }
             }
 
-            Producto.Producto selectedProduct = productos.Find(product => product.code == SelectedProductCode);
-
-            if (codeIsInProducts)
-            {
+            if (codeIsInProducts){
+                Producto.Producto selectedProduct = productos.Find(product => product.code == SelectedProductCode);
                 Receive_Balance(selectedProduct.price);
             }
 
-            if (!codeIsInProducts)
-            {
+            if (!codeIsInProducts){
                 Console.WriteLine("Try again");
                 Verify_SelectedProductCode(Products);
             }
         }
 
-
-        public int Receive_Balance(double product_price)
-        {
+        public int Receive_Balance(double product_price){
             Console.WriteLine("Please insert your balance \n The machine only accepts denominations of 5, 10, 20 and 50");
             double inserted_balance = 0;
-            while (product_price > inserted_balance)
-            {
+            while (product_price > inserted_balance){
                 balance = int.Parse(Console.ReadLine());
                 string balanceIsInDenominations = (monedero.ReceivedBalanceIsInDenominations(inserted_balance: balance)) ? "si" : "no";
-                Console.WriteLine($"{balance} {balanceIsInDenominations} está en la lista de denominaciones");
+                // Console.WriteLine($"{balance} {balanceIsInDenominations} está en la lista de denominaciones");
                 if(monedero.ReceivedBalanceIsInDenominations(inserted_balance: balance)){
                     inserted_balance = inserted_balance + balance;
                     Console.WriteLine($"Has insertado ${inserted_balance}");
@@ -107,13 +98,11 @@ namespace Maquina
                 }
             }
 
-            if (inserted_balance == product_price)
-            {
+            if (inserted_balance == product_price){
                 Console.WriteLine("Entregar producto");
             }
 
-            if (inserted_balance > product_price)
-            {
+            if (inserted_balance > product_price){
                 // No hay cambio
                 if (monedero.TotalMoney == 0){
                     Console.WriteLine("I'm sorry but at this time we do not have the coins to grant your change, try entering the exact balance.");
