@@ -2,7 +2,7 @@ namespace Monedero{
     public class Monedero{
         // El monedero necesita iniciar con cierta cantidad de monedas de cada denominacion.
         // El monedero puede ejecutar una suma del dinero, una resta del cambio.
-        List<Dinero.Dinero> available_denominations;
+        public List<Dinero.Dinero> available_denominations;
         List<Dinero.Dinero> new_available_denominations;
 
         public Monedero(List<Dinero.Dinero> dineros){
@@ -51,12 +51,19 @@ namespace Monedero{
                     new_available_denominations.Add(money.Clone());
                 }
 
+                string changeText = "";
                 // Print copy
                 foreach (Dinero.Dinero money in new_available_denominations){
+                    int monedas = 0;
                     while( money.valor <= current_change && money.cantidad > 0) {
                         current_change = current_change - money.valor;
                         accumulated_change = accumulated_change + money.valor;
-                        money.cantidad = money.cantidad - 1;   
+                        money.cantidad = money.cantidad - 1;
+                        monedas = monedas + 1;   
+                    }
+                    if(accumulated_change >= total_change){
+                        changeText = changeText + " " + monedas + " " + money.tipo + " de " + money.valor;
+                        break;
                     }
                 }
 
@@ -65,42 +72,44 @@ namespace Monedero{
 
                 if(accumulated_change < total_change){
                     Console.WriteLine($"no hay suficiente cambio");
+                } else {   
+                    Console.WriteLine($"Recibes {changeText}");
                 }
 
                 return accumulated_change >= total_change;
         }
 
         // Dar cambio considerando cuantas monedas de cada denominacion existen actualemente dentro de la maquina.
-        public void GiveRemaining(double price, double balance){
-            if (price < balance){
-                double total_change = balance - price;
-                double current_change = total_change;
-                double accumulated_change = 0;
+        // public void GiveRemaining(double price, double balance){
+            // if (price < balance){
+            //     double total_change = balance - price;
+            //     double current_change = total_change;
+            //     double accumulated_change = 0;
 
-                Console.WriteLine($"Precio del producto: ${price}");
-                Console.WriteLine($"Cambio a dar: {balance} - {price} = {balance - price}");
+            //     Console.WriteLine($"Precio del producto: ${price}");
+            //     Console.WriteLine($"Cambio a dar: {balance} - {price} = {balance - price}");
 
-                if (total_change > TotalMoney){
-                    Console.WriteLine("No hay cambio. Te regreso tu dinero.");
-                }
+                // if (total_change > TotalMoney){
+                //     Console.WriteLine("No hay cambio. Te regreso tu dinero.");
+                // }
 
                 // compre algo de 15 y pague con uno de 50
-                foreach (Dinero.Dinero money in available_denominations){
-                    while( money.valor <= current_change && money.cantidad > 0) {
-                        Console.WriteLine($"Te doy 1 {money.tipo} de {money.valor} ");
-                        current_change = current_change - money.valor;
-                        accumulated_change = accumulated_change + money.valor;
-                        money.cantidad = money.cantidad - 1;   
-                    }
-                }
+                // foreach (Dinero.Dinero money in available_denominations){
+                //     while( money.valor <= current_change && money.cantidad > 0) {
+                //         Console.WriteLine($"Te doy 1 {money.tipo} de {money.valor} ");
+                //         current_change = current_change - money.valor;
+                //         accumulated_change = accumulated_change + money.valor;
+                //         money.cantidad = money.cantidad - 1;   
+                //     }
+                // }
 
-                if(accumulated_change < total_change){
-                    Console.WriteLine($"no hay suficiente cambio");
-                } else {
-                    Console.WriteLine($"Cambio restante: {current_change}");
-                    Console.WriteLine($"Cambio dado: {accumulated_change}");
-                }
-            }
-        }
+                // if(accumulated_change < total_change){
+                //     Console.WriteLine($"no hay suficiente cambio");
+                // } else {
+                //     Console.WriteLine($"Cambio restante: {current_change}");
+                //     Console.WriteLine($"Cambio dado: {accumulated_change}");
+                // }
+            // }
+        // }
     }
 }

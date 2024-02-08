@@ -18,12 +18,12 @@ namespace Maquina
         public int balance;
         // Creando el monedero
         Monedero.Monedero monedero = new Monedero.Monedero([
-            new Dinero.Dinero(valor: 1, cantidad: 5, tipo: "Moneda"),
-            new Dinero.Dinero(valor: 2, cantidad: 5, tipo: "Moneda"),
-            new Dinero.Dinero(valor: 5, cantidad: 5, tipo: "Moneda"),
-            new Dinero.Dinero(valor: 10, cantidad: 5, tipo: "Moneda"),
-            new Dinero.Dinero(valor: 20, cantidad: 5, tipo: "billete"),
-            new Dinero.Dinero(valor: 50, cantidad: 5, tipo: "billete"),
+            new Dinero.Dinero(valor: 1, cantidad: 50, tipo: "Moneda"),
+            new Dinero.Dinero(valor: 2, cantidad: 50, tipo: "Moneda"),
+            new Dinero.Dinero(valor: 5, cantidad: 50, tipo: "Moneda"),
+            new Dinero.Dinero(valor: 10, cantidad: 0, tipo: "Moneda"),
+            new Dinero.Dinero(valor: 20, cantidad: 0, tipo: "billete"),
+            new Dinero.Dinero(valor: 50, cantidad: 0, tipo: "billete"),
         ]);
 
         // Creando la lista de productos de la maquina
@@ -32,7 +32,7 @@ namespace Maquina
             new Producto.Producto (code: "A2", name: "Jugo de Naranja", price: 20, stock: 10),
             new Producto.Producto (code: "A3", name: "Café con leche", price: 35, stock: 10),
             new Producto.Producto (code: "A4", name: "Mantecadas", price: 28, stock: 10),
-            new Producto.Producto (code: "B1", name: "Bizcochitos", price: 12, stock: 10),
+            new Producto.Producto (code: "B1", name: "Bizcochitos", price: 12, stock: 1),
             new Producto.Producto (code: "B2", name: "Gansito", price: 21, stock: 10),
        };
 
@@ -40,51 +40,41 @@ namespace Maquina
             while(true){
                 ShowProducts();
                 Verify_SelectedProductCode(Products);
-                // Thread.Sleep(6000);
-                Console.ReadLine();
+                Thread.Sleep(6000);
                 Console.Clear();    
             }
         }
 
         public void ShowProducts(){
+
+            string accepts = "Acepta denominacion de ";
+            foreach(Dinero.Dinero dinero in monedero.available_denominations){
+                accepts = accepts + "$" + dinero.valor + " ";
+            }
+            Console.WriteLine(accepts);
             foreach(Producto.Producto product in Products){
-                Console.WriteLine($"Codigo: {product.code} - {product.name} - ${product.price}");
+                Console.WriteLine($"Codigo: {product.code} - {product.name} - ${product.price} - Stock:{product.stock}");
             }
         }
-        public void Verify_SelectedProductCode(List<Producto.Producto> productos)
-        {
-            string product_names = "";
-            foreach (var product in productos)
-            {
-                product_names = product_names + product.code + ", ";
-            }
-
+        public void Verify_SelectedProductCode(List<Producto.Producto> productos) {
             SelectedProductCode = Console.ReadLine();
 
-            bool codeIsInProducts = false;
-            foreach (var product in productos)
-            {
-                if (product.code == SelectedProductCode)
-                {
-                    codeIsInProducts = true;
-                    Console.WriteLine($"You want a {product.name} that costs {product.price} and has {product.stock} units.");
-                    break;
-                }
-            }
+            Producto.Producto selectedProduct = productos.Find(product => product.code == SelectedProductCode);
 
-            if (codeIsInProducts){
-                Producto.Producto selectedProduct = productos.Find(product => product.code == SelectedProductCode);
-                Receive_Balance(selectedProduct.price);
-            }
-
-            if (!codeIsInProducts){
+            if (selectedProduct == null || selectedProduct.stock == 0){
                 Console.WriteLine("Try again");
                 Verify_SelectedProductCode(Products);
+            } else {
+                bool dropProduct = Receive_Balance(selectedProduct.price);
+
+                if (dropProduct){
+                    UpdateStock(selectedProduct);
+                }
             }
         }
 
-        public int Receive_Balance(double product_price){
-            Console.WriteLine("Please insert your balance \n The machine only accepts denominations of 5, 10, 20 and 50");
+        public bool Receive_Balance(double product_price){
+            Console.WriteLine("Please insert your balance");
             double inserted_balance = 0;
             while (product_price > inserted_balance){
                 balance = int.Parse(Console.ReadLine());
@@ -98,8 +88,10 @@ namespace Maquina
                 }
             }
 
+            bool dropProduct = false;
             if (inserted_balance == product_price){
                 Console.WriteLine("Entregar producto");
+                dropProduct = true;
             }
 
             if (inserted_balance > product_price){
@@ -108,11 +100,14 @@ namespace Maquina
                     Console.WriteLine("I'm sorry but at this time we do not have the coins to grant your change, try entering the exact balance.");
                 } else {
                     // calcular cambio
-                    monedero.CanGiveChange(price: product_price, balance: inserted_balance);
-                    // monedero.GiveRemaining(price: product_price, balance: inserted_balance);
+                    dropProduct = monedero.CanGiveChange(price: product_price, balance: inserted_balance);
                 }
             }
-            return balance;
+            return dropProduct;
+        }
+
+        public void UpdateStock(Producto.Producto producto){
+            producto.stock = producto.stock - 1;
         }
     }
 }

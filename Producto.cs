@@ -14,6 +14,15 @@ namespace Producto
             this.price = price;
             this.code = code;
             this.stock = stock;
+        }
+
+        public Producto Clone(){
+            return new Producto(
+                name = this.name,
+                price = this.price,
+                code = this.code,
+                stock = this.stock 
+            );
         }   
     
     }
